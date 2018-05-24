@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+		
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			html,body,#app,.container{
+				width: 100%;
+				height: 100%;
+			}
+			.container{
+				display: flex;
+				flex-direction: column;
+			}
+			.container .header{
+				height: 3rem;
+				line-height: 3rem;
+			}
+			.container .header ul{
+				display: flex;
+			}
+			.container .header ul li{
+				flex: 1;
+				text-align: center;
+				list-style: none;
+			}
+			
+			.section{
+				flex: 1;
+				overflow-y: scroll;
+			}
+			ul li img{
+				width: 40%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			
+		</div>
+	</body>
+	<script type="text/babel">
+		class Main1 extends React.Component{
+			constructor(props){
+								super(props)
+								this.state={
+									arr:[]
+								}
+						}
+			componentDidMount(){
+							axios.get("kc.json").then((res)=>{
+								console.log(res.data)
+								this.setState({
+									arr:res.data
+								})
+								
+								
+							})
+					}
+			render(){
+				return(
+					<div className="main">
+						{
+							this.state.arr.map((ele,index)=>{			     		
+					     		return(<ul key={index}>
+											<li><img src={ele.tx}/></li>
+											<li>{ele.title}</li>
+											<li><img src={ele.img1}/></li>
+										</ul>)
+					     	})
+						}
+					</div>
+				)
+			}
+		}
+		class Main2 extends React.Component{
+			render(){
+				return(
+					<div className="main">动态页面</div>
+				)
+			}
+		}
+		class Main extends React.Component{		
+			constructor(props){
+				super(props)
+
+			}
+			render(){
+				
+				 return this.props.show==1?<Main1></Main1>:<Main2></Main2>
+			}
+			
+		}
+		class Kc extends React.Component{		
+			constructor(props){
+				super(props)
+				this.state = {
+					show:1
+				}
+			}
+			render(){
+				return(
+					
+						<div className="container">
+							
+							<div className="header">
+								<ul>
+									<li onClick={
+									        		()=>{
+									        			this.setState({
+											            	show:1
+											           })
+									        		}
+									        	}>主页</li>
+									<li onClick={
+									        		()=>{
+									        			this.setState({
+											            	show:2
+											           })
+									        		}
+									        	}>动态(1条)</li>
+								
+									        										
+								</ul>
+							
+						</div>
+						<div className="section">
+								<Main show={this.state.show}>
+		        			
+		        				</Main>
+							</div>
+					</div>
+				)
+				
+			}
+			
+		}
+		ReactDOM.render(
+			<Kc></Kc>,
+			document.getElementById("app")
+		)
+	</script>
+</html>
